@@ -1,0 +1,595 @@
+{
+  "name": "Krua Cham Pay LINE Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "krua-line",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "527a9969-5158-4318-8a94-f6227f5af1cf",
+      "name": "Webhook",
+      "webhookId": "ec956c84-c89c-490c-9cbf-4795367efb74"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7dad022d-59d9-424d-976d-aebdaaf2a65f",
+              "leftValue": "={{ $json.body.events[0].type }}",
+              "rightValue": "message",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "baa4cddf-5e87-4600-8658-90b9c448e730",
+              "leftValue": "={{ $json.body.events[0].message.type }}",
+              "rightValue": "text",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "062a67cc-1ac3-4cc6-a620-00c77d6c4b0f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.events[0].message.text.trim().toLowerCase() }}",
+                    "rightValue": "สวัสดี|หวัดดี|ดีครับ|ดีค่ะ|ดีจ้า",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    },
+                    "id": "974dcee8-e8ea-497b-802e-5bee9708200d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "greeting"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "177b8f06-96ae-4c39-9233-3e42de4a91c2",
+                    "leftValue": "={{ $json.body.events[0].message.text.trim().toLowerCase() }}",
+                    "rightValue": "ขอเมนูอาหาร|เมนู|รายการอาหาร|ขอเมนู|เมนูอาหาร",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "menu"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "881f229b-b7a7-466d-81c1-6c5d76df2bc5",
+                    "leftValue": "={{ $json.body.events[0].message.text.trim().toLowerCase() }}",
+                    "rightValue": "คั่วทะเลพิเศษเท่าไร|คั่วทะเล",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "price"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9efa09b4-9f58-4435-b592-c09c1a4e2e37",
+                    "leftValue": "={{ $json.body.events[0].message.text.trim().toLowerCase() }}",
+                    "rightValue": "โจ๊ก|มีโจ๊กไหม",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "porridge"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f3347a08-153b-4fe2-8fe0-1113a25f9f9c",
+                    "leftValue": "={{ $json.body.events[0].message.text.trim().toLowerCase() }}",
+                    "rightValue": "มีพิซซ่าไหม|ขนม|พิซซ่า|ไข่ไก่|ลาบหมู",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pizza"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        496,
+        -272
+      ],
+      "id": "1ccb4aa1-7d51-4693-91c1-b3f90b4a7995",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a833c04-ecdd-46a7-9a0d-3911fcf9443e",
+              "name": "replyText",
+              "value": "สวัสดีครับ ยินดีต้อนรับสู่ร้านคั่วชามเปลครับ",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        944,
+        -416
+      ],
+      "id": "ec84969e-ee19-4d69-a261-42f374736442",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb5ad8b6-b1cc-4f55-821f-393cff60b739",
+              "name": "replyText",
+              "value": "ร้านคั่วชามเปลมีเมนูดังนี้ครับ  \n\n1) คั่วไก่ 80 บาท \n2) คั่วทะเล (พิเศษ) 130 บาท \n3) โจ๊กหมู (ธรรมดา) 60 บาท \n4) ปาท่องโก๋ 8 บาท \n5) โจ๊กหมูใส่ไข่ (ธรรมดา) 65 บาท",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        944,
+        -304
+      ],
+      "id": "db75f414-d177-4b2f-af31-8d226f1ff147",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa09d29b-8dd5-4809-b250-1b64a134c2ac",
+              "name": "replyText",
+              "value": "คั่วทะเล (พิเศษ) ราคา 130 บาทครับ",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        944,
+        -192
+      ],
+      "id": "8e6db612-383b-43b9-bab6-7e22b52609dc",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f8e00e98-8b17-4378-a0f2-e3db18276fae",
+              "name": "replyText",
+              "value": "โจ๊กหมู 60 บาท และโจ๊กหมูใส่ไข่ 65 บาทครับ",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        944,
+        -80
+      ],
+      "id": "3e922454-ebda-4d9c-92ab-b90d2f7aba22",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "079536ea-c3c0-4da1-b701-25cabd33d4c0",
+              "name": "replyText",
+              "value": "ขออภัยครับ ทางร้านยังไม่มีเมนูนี้ครับ สามารถสอบถามเมนูอื่นได้ครับ",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        944,
+        64
+      ],
+      "id": "b5d5d914-5e82-4855-b5e7-83059a0cf26a",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "replyToken",
+              "value": "={{ $json.body.events[0].replyToken }}"
+            },
+            {
+              "name": "messages",
+              "value": "={{ [{ type: \"text\", text: $json.replyText }] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1232,
+        -160
+      ],
+      "id": "5c94b803-8a2c-4862-9d5f-81dd9e2855a2",
+      "name": "LINE Reply",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "jVSjqLqUBp3h7xTl",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:3001/menus",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1232,
+        -544
+      ],
+      "id": "ffcb3eb1-34f2-4eee-b5a1-36cf889705c8",
+      "name": "Get Firebase Menus"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "clashHandling": {
+            "values": {
+              "resolveClash": "addSuffix"
+            }
+          },
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1504,
+        -432
+      ],
+      "id": "cdf1e8de-d76f-4b6d-abb4-96bfa6d1e74e",
+      "name": "Merge Firebase Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lineData = $('Switch').first().json;\n\nconst firebaseData = $('Get Firebase Menus').first().json;\n\nreturn [\n  {\n    json: {\n      ...lineData,\n      ...firebaseData\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        -624
+      ],
+      "id": "8bb3a792-69b8-4334-97a2-c23329a90f47",
+      "name": "Combine LINE and Firebase"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5f7e8a75-97c5-4088-ab15-8c30c217aea4",
+              "name": "replyText",
+              "value": "={{ 'ร้านคั่วชามเปลมีเมนูดังนี้ครับ\\n\\n' + $json.menus.map((m, i) => (i + 1) + ') ' + m.name + ' ' + m.price + ' บาท').join('\\n') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1744,
+        -624
+      ],
+      "id": "7c873a15-7d33-41b7-a6fe-02ae24ef7471",
+      "name": "Reply Menu Firebase"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Firebase Menus",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "LINE Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "LINE Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "LINE Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "LINE Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "LINE Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Firebase Menus": {
+      "main": [
+        [
+          {
+            "node": "Combine LINE and Firebase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine LINE and Firebase": {
+      "main": [
+        [
+          {
+            "node": "Reply Menu Firebase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c80ae2ee-ccf9-4580-a7e6-5157904b124f",
+  "meta": {
+    "instanceId": "7fb34037853dff44f053d79ea1126f7e21681b4046b3723887c69f77f8f6ede6"
+  },
+  "nodeGroups": [],
+  "id": "PKcWY5tnazAySTNi",
+  "tags": []
+}
